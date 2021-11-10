@@ -1,13 +1,17 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <vector>
+#include <string>
 #include "functions.h"
 #include "errors.h"
 using namespace std;
 
 int main(int argc, char** argv) {
-    
+    if (argc < 7) {
+        cerr << "Insufficient number of parameters.";
+        exit(INSUFFICIENT_NUMBER_OF_PARAMETERS);
+    }
+
     // Tests for loading the correct files from the command line
     cout << "The files loaded are: " << endl;
     cout << "Plugboard: " << argv[1] << endl;
@@ -23,11 +27,15 @@ int main(int argc, char** argv) {
     load_plugboard(argc, argv, plugboard, number, plug_count);
     if (plug_count % 2 == 1) {
         cerr << "Invalid number of plugboard parameters.";
-        return 6;
-    } 
+        exit(INCORRECT_NUMBER_OF_PLUGBOARD_PARAMETERS);
+    }
+
+    cout << "The plugboard configuration loaded is: ";
     for (int i = 0; i < plug_count; i++) {
         cout << plugboard[i] << " ";
     }
-    return 0;
+
     
+
+    return 0;
 }
