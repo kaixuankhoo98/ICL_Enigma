@@ -25,17 +25,18 @@ int main(int argc, char** argv) {
     // Maximum 26 plugboard swaps! Sets any excess plugboards to 26, just outside the range.
     int number, plug_count = 0;
     load_plugboard(argc, argv, plugboard, number, plug_count);
-    if (plug_count % 2 == 1) {
-        cerr << "Invalid number of plugboard parameters.";
-        exit(INCORRECT_NUMBER_OF_PLUGBOARD_PARAMETERS);
-    }
-
-    cout << "The plugboard configuration loaded is: ";
+    cout << "The plugboard loaded is: ";
     for (int i = 0; i < plug_count; i++) {
         cout << plugboard[i] << " ";
-    }
+    } cout << "\n";
 
-    
+    int reflector[26];
+    int refl_count = 0;
+    load_reflector(argc, argv, reflector, number, refl_count);
+    cout << "The reflector loaded is: ";
+    for (int i = 0; i < refl_count; i++) {
+        cout << reflector[i] << " ";
+    } cout << ", which has " << refl_count << " values.\n";
 
     return 0;
 }
