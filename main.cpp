@@ -1,8 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <string>
-#include "functions.h"
+#include <vector>
+#include <sstream>
+#include "functions1.h"
 #include "errors.h"
 using namespace std;
 
@@ -24,6 +25,12 @@ int main(int argc, char** argv) {
     } cout << "(Total of " << number_of_rotors << " rotors) " << endl;
     cout << "Rotor position: " << argv[argc-1] << "\n" << endl;
 
+    int exit_code = 0;
+
+    exit_code = load_reflector(argv[2]);
+
+    cout << "\nExit code " << exit_code;
+    /*
     // Importing the files into variables
     int plugboard[26] = {26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26}; 
     // Maximum 26 plugboard swaps! Sets any excess plugboards to 26, just outside the range.
@@ -42,11 +49,19 @@ int main(int argc, char** argv) {
         cout << reflector[i] << " ";
     } cout << ", which has " << refl_count << " values.\n";
 
+    
     int count = notch_count(argv[3]);
     cout << "The notch count is " << count << endl;
     cout << is_rotor_mapping(argv[3]) << endl;
     cout << is_rotor_indexvalid(argv[3], 3) << endl;
     cout << is_numeric(argv[3], 2) << endl; // test if second postition is numeric
+    
+    int exit_code;
+    exit_code = load_rotor(argv[3], 1);
+
+    cout << "Exit code is: " << exit_code << endl; 
+    
+    cout << is_numeric(argv[3], 42); */
 
     return 0;
 }

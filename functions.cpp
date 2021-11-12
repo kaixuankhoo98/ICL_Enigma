@@ -83,52 +83,37 @@ void load_reflector(int argc, char *argv[], int reflector[26], int& number, int&
     in_reflector.close();
 }
 
-int load_rotor(int argc, char filename[20], int rotor[52], int& number) {
-    ifstream in_rotor;
-    in_rotor.open(filename);
-    int notch_count = 0, rotor_count = 0;
-    
-    string rotor_input;
-    getline(ifstream(filename), rotor_input);
-    if (!is_numeric(rotor_input)) {
-        cerr << "The rotor contains a character other than a number.";
-        exit(NON_NUMERIC_CHARACTER);
-    }
-
-    cout << "The loaded rotor contains: ";
-    while (in_rotor >> number) {
-        cout << number << " ";
-    }
-
-     
-        
-    // obtain the total number of contents in the rotor file
-    /* if (rotor_count < 26) {
-            cerr << "Invalid Rotor Mapping";
-            exit(INVALID_ROTOR_MAPPING);
-        } */ 
-    /*notch_count = rotor_count-26;
-    for (int i = 0; i <= notch_count; i++) {
-        if (notch_count != 0) {
-            for (int j = 0; j <= i-1; j++) {
-                if (rotor[i+26] == rotor [j+26]) {
-                    cerr << "Invalid rotor mapping";
-                    exit(INVALID_ROTOR_MAPPING);
-                }
-            }
-        }
-    } */
-
-    in_rotor.close();
-    return notch_count;
-}
-
-// Checks if a given input string contains only numbers. (Letters and special characters will return false)
 bool is_numeric(string input) {
     for (int i = 0; i < input.length(); i++)
         if (!isdigit(input[i]) && input[i] != ' ')
             return false;
     return true;
+}
+
+int load_rotor(char filename[20], int rotor_number) {
+    ifstream in_rotor;
+    in_rotor.open(filename);
+    string rotor_input;
+    getline(ifstream(filename), rotor_input);
+    int file_length = rotor_input.length();
+
+    for (int i = 0; i < file_length; i++) {
+        if (!isdigit(get_file_input_char(filename, i))) {
+            return INVALID_INPUT_CHARACTER;
+        }
+        if (i != 0 && i < 26) {
+            for (int j = 0; j < i-1; j++) {
+                if (get_file_input(filename, i) == get_file_input(filename, j))
+                    return INVALID_ROTOR_MAPPING;
+            }
+        }
+    }
+    /* if (!is_rotor_mapping(filename))
+        return INVALID_ROTOR_MAPPING; */
+
+    
+    in_rotor.close();
+    return 0;
 }
 
 int notch_count(char filename[20]) {
@@ -149,7 +134,7 @@ bool is_rotor_mapping(char filename[20]) {
     in_rotor.open(filename);
     bool legal = true;
 
-    if (count < 0)
+    if (count < 0 || count > 26)
         legal = false;
     
     in_rotor.close();
@@ -178,12 +163,32 @@ bool is_numeric(char filename[20], int index) {
     bool legal = true;
     char loaded_character, full_string[100];
     int length = 0;
-
+    
     while (in_rotor >> loaded_character) {
         full_string[length++] = loaded_character;
     }
     if (!isdigit(full_string[index]) && full_string[index] != ' ')
         legal = false;
     
+    // cout << length << " "; 
+    in_rotor.close();
     return legal;
 } // takes index (of the CHARACTERS in the file) and returns if that is a numeric number (not including whitespace)
+
+int get_file_input(char filename[20], int index) {
+    ifstream input;
+    input.open(filename);
+    int number;
+    for (int i = 0; i <= index; i++)
+        input >> number;
+    return number;
+}
+
+char get_file_input_char(char filename[20], int index) {
+    ifstream input;
+    input.open(filename);
+    char number;
+    for (int i = 0; i <= index; i++)
+        input >> number;
+    return number;
+}
