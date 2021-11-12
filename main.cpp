@@ -7,18 +7,22 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    if (argc < 7) {
+    if (argc < 4) {
         cerr << "Insufficient number of parameters.";
         exit(INSUFFICIENT_NUMBER_OF_PARAMETERS);
     }
 
+    int number_of_rotors = 0;
     // Tests for loading the correct files from the command line
     cout << "The files loaded are: " << endl;
     cout << "Plugboard: " << argv[1] << endl;
     cout << "Reflector: " << argv[2] << endl;
-    cout << "Rotors (1, 2 and 3): " << argv[3] 
-        << " " << argv[4] << " " << argv[5] << endl;
-    cout << "Rotor position: " << argv[6] << "\n" << endl;
+    cout << "Rotors: ";
+    for (int i = 0; i <= argc-5; i++) {
+        cout << argv[3+i] << " ";
+        number_of_rotors++;
+    } cout << "(Total of " << number_of_rotors << " rotors) " << endl;
+    cout << "Rotor position: " << argv[argc-1] << "\n" << endl;
 
     // Importing the files into variables
     int plugboard[26] = {26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26}; 
@@ -37,6 +41,12 @@ int main(int argc, char** argv) {
     for (int i = 0; i < refl_count; i++) {
         cout << reflector[i] << " ";
     } cout << ", which has " << refl_count << " values.\n";
+
+    int count = notch_count(argv[3]);
+    cout << "The notch count is " << count << endl;
+    cout << is_rotor_mapping(argv[3]) << endl;
+    cout << is_rotor_indexvalid(argv[3], 3) << endl;
+    cout << is_numeric(argv[3], 2) << endl; // test if second postition is numeric
 
     return 0;
 }
