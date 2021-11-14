@@ -3,8 +3,13 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include "functions1.h"
+#include "functions.h"
 #include "errors.h"
+
+#include "Plugboard.h"
+#include "Reflector.h"
+#include "Rotor.h"
+#include "Position.h"
 using namespace std;
 
 int main(int argc, char** argv) {
@@ -15,7 +20,7 @@ int main(int argc, char** argv) {
 
     int number_of_rotors = 0;
     // Tests for loading the correct files from the command line
-    cout << "The files loaded are: " << endl;
+    cout << argc << "The files loaded are: " << endl;
     cout << "Plugboard: " << argv[1] << endl;
     cout << "Reflector: " << argv[2] << endl;
     cout << "Rotors: ";
@@ -25,43 +30,19 @@ int main(int argc, char** argv) {
     } cout << "(Total of " << number_of_rotors << " rotors) " << endl;
     cout << "Rotor position: " << argv[argc-1] << "\n" << endl;
 
-    int exit_code = 0;
+    Plugboard plugboard(argv[1]);
+    cout << "Plugboard exit code: " << plugboard.exit_code << endl << endl;
 
-    exit_code = load_reflector(argv[2]);
+    Reflector reflector(argv[2]);
+    cout << "Reflector exit code: " << reflector.exit_code << endl << endl;
 
-    cout << "\nExit code " << exit_code;
-    /*
-    // Importing the files into variables
-    int plugboard[26] = {26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26}; 
-    // Maximum 26 plugboard swaps! Sets any excess plugboards to 26, just outside the range.
-    int number, plug_count = 0;
-    load_plugboard(argc, argv, plugboard, number, plug_count);
-    cout << "The plugboard loaded is: ";
-    for (int i = 0; i < plug_count; i++) {
-        cout << plugboard[i] << " ";
-    } cout << "\n";
+    Rotor rotor1(argv[3]);
+    cout << "Rotor exit code: " << rotor1.exit_code << endl << endl;
 
-    int reflector[26];
-    int refl_count = 0;
-    load_reflector(argc, argv, reflector, number, refl_count);
-    cout << "The reflector loaded is: ";
-    for (int i = 0; i < refl_count; i++) {
-        cout << reflector[i] << " ";
-    } cout << ", which has " << refl_count << " values.\n";
+    Position position(argv[argc-1], argc-1);
+    cout << "Position exit code: " << position.exit_code << endl << endl;
 
     
-    int count = notch_count(argv[3]);
-    cout << "The notch count is " << count << endl;
-    cout << is_rotor_mapping(argv[3]) << endl;
-    cout << is_rotor_indexvalid(argv[3], 3) << endl;
-    cout << is_numeric(argv[3], 2) << endl; // test if second postition is numeric
-    
-    int exit_code;
-    exit_code = load_rotor(argv[3], 1);
-
-    cout << "Exit code is: " << exit_code << endl; 
-    
-    cout << is_numeric(argv[3], 42); */
 
     return 0;
 }
