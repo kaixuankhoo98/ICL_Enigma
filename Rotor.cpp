@@ -17,7 +17,7 @@ Rotor::Rotor(char filename[20]) {
     if (exit_code != 4) insert_to_vector(rotor_vector, contents);
     get_notches(notches, rotor_vector);
     length = rotor_vector.size();
-    //print_ints(rotor_vector);
+    // print_ints(rotor_vector);
 }
 
 Rotor::Rotor() {

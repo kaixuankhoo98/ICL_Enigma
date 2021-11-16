@@ -110,30 +110,21 @@ string encrypt(string input, char* argv[], int argc) {
                 if (rotor3.rotor_vector[rotor2.rotor_vector[rotor1.rotor_vector[j]]] == reflected_letter)
                     back_through_rotors = j;
             }
-        }
+        } // Passes back through rotors
 
         int output = back_through_rotors;
         // FINAL PASS THROUGH PLUGBOARDS
-        for (int k = 0; k < plugboard.length; k++) {
-            if (plugboard.plugboard_vector[k] == back_through_rotors) {
-                if (k % 2 == 0) {
-                    output = plugboard.plugboard_vector[k+1];
-                }
-                if (k % 2 == 1) {
-                    output = plugboard.plugboard_vector[k-1];
-                }
-            }
-        }   
+        output = through_plugboard(argc, argv, output);
 
-        /*
+
         if (argc == 7) {
             for (int i = 0; i < rotor3.notches.size(); i++) {
-                if (rotor_3_letter == rotor3.notches[i]) {
+                if (rotate_true(rotor3.rotor_vector, rotor3.notches)) {
                     rotor2.rotate_rotor(rotor2.rotor_vector);
                 } // Rotates the rotor to the left if the first position is in the notches
             }
             for (int i = 0; i < rotor2.notches.size(); i++) {
-                if (rotor_2_letter == rotor2.notches[i]) {
+                if (rotate_true(rotor2.rotor_vector, rotor2.notches)) {
                     rotor1.rotate_rotor(rotor1.rotor_vector);
                 } 
             }
@@ -141,7 +132,7 @@ string encrypt(string input, char* argv[], int argc) {
 
         if (argc == 6) {
             for (int i = 0; i < rotor2.notches.size(); i++) {
-                if (rotor_2_letter == rotor2.notches[i]) {
+                if (rotate_true(rotor2.rotor_vector, rotor2.notches)) {
                     rotor1.rotate_rotor(rotor1.rotor_vector);
                 } 
             }
@@ -150,7 +141,7 @@ string encrypt(string input, char* argv[], int argc) {
         // cout << rotor_3_letter << " ";
 
         // cout << letter << "\t" << rotor_1_letter << "\t" << rotor_2_letter << "\t" << rotor_3_letter 
-        // << "\t" << reflected_letter << "\t" << backletter_1 << "\t" << backletter_2 << "\t" << backletter_3 << "\n"; */
+        // << "\t" << reflected_letter << "\t" << backletter_1 << "\t" << backletter_2 << "\t" << backletter_3 << "\n"; 
 
         encrypted += static_cast<char>(output + 'A');
     }
@@ -205,4 +196,12 @@ char through_plugboard(int argc, char* argv[], char input) {
         }
 
     return input;
+}
+
+bool rotate_true(vector<int> rotor, vector<int> notch) {
+    for (int i = 0; i < notch.size(); i++) {
+        if (rotor[0] == notch[i])
+            return true;
+    }
+    return false;
 }
