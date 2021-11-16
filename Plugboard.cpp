@@ -11,17 +11,17 @@ using namespace std;
 Plugboard::Plugboard(char filename[20]) {
     name = filename;
     contents = open_file_string(filename);
-    vector<int> plugboard_vector;
     
     exit_code = Plugboard::load_plugboard(filename);
     
     insert_to_vector(plugboard_vector, contents);
+    length = plugboard_vector.size();
     // print_ints(plugboard_vector); // Use to test that the vector has been loaded correctly
 }
 
 int Plugboard::load_plugboard(char filename[20]) {
     string contents = open_file_string(filename);
-    cout << "The plugboard loaded contains:\n" << contents << endl; 
+    // cout << "The plugboard loaded contains:\n" << contents << endl; 
     vector<string> inputWords;
     string word;
     stringstream s(contents);

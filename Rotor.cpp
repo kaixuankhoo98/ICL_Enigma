@@ -11,16 +11,22 @@ using namespace std;
 Rotor::Rotor(char filename[20]) {
     name = filename;
     contents = open_file_string(filename);
-    vector<int> rotor_vector;
 
     exit_code = Rotor::load_rotor(filename);
+    
     insert_to_vector(rotor_vector, contents);
+    get_notches(notches, rotor_vector);
+    length = rotor_vector.size();
     // print_ints(rotor_vector);
+}
+
+Rotor::Rotor() {
+    exit_code = 0;
 }
 
 int Rotor::load_rotor(char filename[20]) {
     string contents = open_file_string(filename);
-    cout << "The rotor loaded contains:\n" << contents << endl; 
+    // cout << "The rotor loaded contains:\n" << contents << endl; 
     vector<string> inputWords;
     string word;
     stringstream s(contents);
@@ -65,6 +71,20 @@ void Rotor::insert_to_vector(vector<int>& rotor_vector, string contents) {
     for (int i = 0; i < inputWords.size(); i++) {
         rotor_vector.push_back(stoi(inputWords[i]));
     }
+}
+
+void Rotor::get_notches(vector<int>& notches, vector<int> rotor_vector) {
+    for (int i = 26; i < rotor_vector.size(); i++) {
+        notches.push_back(rotor_vector[i]);
+    }
+}
+
+void Rotor::rotate_rotor(vector<int>& rotor_vector) {
+    int temp = rotor_vector[0];
+    for (int i = 1; i < 26; i++) {
+        rotor_vector[i-1] = rotor_vector[i];
+    }
+    rotor_vector[25] = temp;
 }
 
 void Rotor::print_ints(vector<int> rotor_vector) {

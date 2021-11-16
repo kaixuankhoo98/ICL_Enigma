@@ -13,6 +13,8 @@ class Reflector {
 
     public:
     Reflector(char filename[20]);
+    int length;
+    vector<int> reflector_vector;
     int load_reflector(char filename[20]);
     int exit_code = 0;
     void insert_to_vector(vector<int>& reflector_vector, string contents);

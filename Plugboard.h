@@ -13,6 +13,8 @@ class Plugboard {
     
     public:
     Plugboard(char filename[20]);
+    int length;
+    vector<int> plugboard_vector;
     int load_plugboard(char filename[20]);
     int exit_code = 0;
     void insert_to_vector(vector<int>& plugboard_vector, string contents);

@@ -13,7 +13,8 @@ class Position {
     vector<int> inputInts;
 
     public:
-    Position(char filename[20], int argc);
+    Position(char filename[20], int argc); // argc is necessary to determine how many rotors there are.
+    vector<int> position_vector;
     int load_position(char filename[20], int number_of_rotors);
     int exit_code = 0;
     void insert_to_vector(vector<int>& position_vector, string contents);

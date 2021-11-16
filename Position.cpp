@@ -11,7 +11,7 @@ using namespace std;
 Position::Position(char filename[20], int argc) {
     name = filename;
     contents = open_file_string(filename);
-    vector<int> position_vector;
+    
     int number_of_rotors = argc-3;
 
     exit_code = Position::load_position(filename, number_of_rotors);
@@ -21,7 +21,7 @@ Position::Position(char filename[20], int argc) {
 
 int Position::load_position(char filename[20], int number_of_rotors) {
     string contents = open_file_string(filename);
-    cout << "The position file loaded contains:\n" << contents << endl; 
+    // cout << "The position file loaded contains:\n" << contents << endl; 
     vector<string> inputWords;
     string word;
     stringstream s(contents);
@@ -43,7 +43,7 @@ int Position::load_position(char filename[20], int number_of_rotors) {
             return INVALID_INDEX;
     }
 
-    if (inputInts.size() != number_of_rotors)
+    if (inputInts.size() < number_of_rotors)
         return NO_ROTOR_STARTING_POSITION;
     
     return NO_ERROR;

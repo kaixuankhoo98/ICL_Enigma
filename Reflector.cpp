@@ -11,16 +11,17 @@ using namespace std;
 Reflector::Reflector(char filename[20]) {
     name = filename;
     contents = open_file_string(filename);
-    vector<int> reflector_vector;
 
     exit_code = Reflector::load_reflector(filename);
+
     insert_to_vector(reflector_vector, contents);
+    length = reflector_vector.size();
     // print_ints(reflector_vector);
 }
 
 int Reflector::load_reflector(char filename[20]) {
     string contents = open_file_string(filename);
-    cout << "The reflector loaded contains:\n" << contents << endl; 
+    // cout << "The reflector loaded contains:\n" << contents << endl; 
     vector<string> inputWords;
     string word;
     stringstream s(contents);
