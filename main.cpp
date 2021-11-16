@@ -40,50 +40,26 @@ int main(int argc, char** argv) {
     Position position(argv[argc-1], argc-1);
     cout << "Position exit code: " << position.exit_code << endl << endl;
     */
-    
-    // CREATE INPUTS TO ALLOW OPTION TO CHOOSE ENCRYPTION OR DECRYPTION
-    int mode;
-    cout << "Please enter 1 if you would like to encrypt a message, or 2 if you would like to decrypt."
-    << endl;
-    cin >> mode;
-    if (mode < 1 || mode > 2) {
-        cout << "Please enter either 1 (for encryption) or 2 (for decryption):" << endl;
-        cin >> mode;
+
+    if (exit_codes_total(argc, argv) != 0) {
+        cerr << "Exit code: " << exit_codes_total(argc, argv);
+        return exit_codes_total(argc, argv);
     }
 
-    if (mode == 1) {
-        string input, converted;
-        cout << "Please enter the message you would like to encrypt in all upper-case:" << endl;
-        getline(cin >> ws, input);
-        int input_exit_code;
-        input_exit_code = verify_string(input);
+    string input, converted;
+    cout << "Please enter the message you would like to encrypt in all upper-case:" << endl;
+    getline(cin >> ws, input);
+    int input_exit_code;
+    input_exit_code = verify_string(input);
 
-        if (input_exit_code != 0) {
-            cerr << "Input exit code: " << input_exit_code;
-            return input_exit_code;
-        }
-
-        converted = convert_string(input);
-        // cout << converted << endl;
-        cout << encrypt(converted, argv, argc);
+    if (input_exit_code != 0) {
+        cerr << "Input exit code: " << input_exit_code;
+        return input_exit_code;
     }
 
-    if (mode == 2) {
-        string input, converted;
-        cout << "Please enter the message you would like to have decrypted in all upper-case:" << endl;
-        getline(cin >> ws, input);
-        int input_exit_code;
-        input_exit_code = verify_string(input);
-
-        if (input_exit_code != 0) {
-            cout << "Input exit code: " << input_exit_code;
-            return input_exit_code;
-        }
-        
-        converted = convert_string(input);
-        // cout << converted << endl;
-        // cout << decrypt(converted, argv, argc);
-    }
+    converted = convert_string(input);
+    // cout << converted << endl;
+    cout << encrypt(converted, argv, argc);
 
     return 0;
 }
