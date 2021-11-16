@@ -63,17 +63,17 @@ string encrypt(string input, char* argv[], int argc) {
         while (rotor1.rotor_vector[0] != position.position_vector[0]) {
             rotor1.rotate_rotor(rotor1.rotor_vector);
         } // Rotor 1
-    } 
+    } rotor1.print_ints(rotor1.rotor_vector);
     if (argc >= 6) {
         while (rotor2.rotor_vector[0] != position.position_vector[1]) {
             rotor2.rotate_rotor(rotor2.rotor_vector);
         } // Rotor 2
-    }
+    } rotor2.print_ints(rotor2.rotor_vector);
     if (argc >= 7) {
         while (rotor3.rotor_vector[0] != position.position_vector[2]) {
             rotor3.rotate_rotor(rotor3.rotor_vector);
         } // Rotor 3 
-    }
+    } rotor3.print_ints(rotor3.rotor_vector);
 
     for (int i = 0; i < input.length(); i++)  { // go through each letter one by one.
         if (argc == 7) rotor3.rotate_rotor(rotor3.rotor_vector);
@@ -81,23 +81,20 @@ string encrypt(string input, char* argv[], int argc) {
         if (argc == 5) rotor1.rotate_rotor(rotor1.rotor_vector);
 
         int letter = input[i] - static_cast<int>('A'); // letter converted to int 
-
+        
         // Plugboard swap
-        for (int j = 0; j < plugboard.length; j++) {
-            if (plugboard.plugboard_vector[j] == letter) {
-                if (j % 2 == 0) {
-                    letter = plugboard.plugboard_vector[j+1];
-                }
-                if (j % 2 == 1) {
-                    letter = plugboard.plugboard_vector[j-1];
-                }
-            }
-        } // Pass on letter to reflector
+        letter = through_plugboard(argc, argv, letter);    // Pass on letter to rotors
+
+        int through_rotors;
+        if (argc == 7) through_rotors = rotor3.rotor_vector[rotor2.rotor_vector[rotor1.rotor_vector[letter]]];
+        if (argc == 6) through_rotors = rotor2.rotor_vector[rotor1.rotor_vector[letter]];
+        if (argc == 5) through_rotors = rotor1.rotor_vector[letter];
+
 
         // Reflector swap
         int reflected_letter;
         for (int k = 0; k < reflector.length; k++) {
-            if (letter == reflector.reflector_vector[k]) {
+            if (through_rotors == reflector.reflector_vector[k]) {
                 if (k % 2 == 0) {
                     reflected_letter = reflector.reflector_vector[k+1];
                 }
@@ -105,19 +102,30 @@ string encrypt(string input, char* argv[], int argc) {
                     reflected_letter = reflector.reflector_vector[k-1];
                 }
             }
-        } // At this point, reflected_letter is the value to be passed on to rotors.
-        
+        }
 
-        int rotor_1_letter, rotor_2_letter, rotor_3_letter;
-        // Series of transformations through the rotor(s)
-        rotor_1_letter = rotor1.rotor_vector[reflected_letter];
-        if (argc >= 6) {
-            rotor_2_letter = rotor2.rotor_vector[rotor_1_letter];
-        } else rotor_2_letter = rotor_1_letter;
-        if (argc >= 7) {
-            rotor_3_letter = rotor3.rotor_vector[rotor_2_letter];
-        } else rotor_3_letter = rotor_2_letter;
+        int back_through_rotors;
+        if (argc == 7) {
+            for (int j = 0; j < 26; j++) {
+                if (rotor3.rotor_vector[rotor2.rotor_vector[rotor1.rotor_vector[j]]] == reflected_letter)
+                    back_through_rotors = j;
+            }
+        }
 
+        int output = back_through_rotors;
+        // FINAL PASS THROUGH PLUGBOARDS
+        for (int k = 0; k < plugboard.length; k++) {
+            if (plugboard.plugboard_vector[k] == back_through_rotors) {
+                if (k % 2 == 0) {
+                    output = plugboard.plugboard_vector[k+1];
+                }
+                if (k % 2 == 1) {
+                    output = plugboard.plugboard_vector[k-1];
+                }
+            }
+        }   
+
+        /*
         if (argc == 7) {
             for (int i = 0; i < rotor3.notches.size(); i++) {
                 if (rotor_3_letter == rotor3.notches[i]) {
@@ -141,9 +149,10 @@ string encrypt(string input, char* argv[], int argc) {
         
         // cout << rotor_3_letter << " ";
 
-        // cout << letter << "\t" << reflected_letter << "\t" << rotor_1_letter << "\t" << rotor_2_letter << "\t" << rotor_3_letter << "\n";
+        // cout << letter << "\t" << rotor_1_letter << "\t" << rotor_2_letter << "\t" << rotor_3_letter 
+        // << "\t" << reflected_letter << "\t" << backletter_1 << "\t" << backletter_2 << "\t" << backletter_3 << "\n"; */
 
-        encrypted += static_cast<char>(rotor_3_letter + 'A');
+        encrypted += static_cast<char>(output + 'A');
     }
     cout << "\n";
     return encrypted;
@@ -179,4 +188,21 @@ int exit_codes_total(int argc, char* argv[]) {
     if (position.exit_code != 0) return position.exit_code;
 
     return 0;
+}
+
+char through_plugboard(int argc, char* argv[], char input) {
+    Plugboard plugboard(argv[1]);
+
+    for (int k = 0; k < plugboard.length; k++) {
+            if (plugboard.plugboard_vector[k] == input) {
+                if (k % 2 == 0) {
+                    return plugboard.plugboard_vector[k+1];
+                }
+                if (k % 2 == 1) {
+                    return plugboard.plugboard_vector[k-1];
+                }
+            }
+        }
+
+    return input;
 }

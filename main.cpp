@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
 
     int number_of_rotors = 0;
     // Tests for loading the correct files from the command line
-    cout << argc << "The files loaded are: " << endl;
+    cout << "The files loaded are: " << endl;
     cout << "Plugboard: " << argv[1] << endl;
     cout << "Reflector: " << argv[2] << endl;
     cout << "Rotors: ";
