@@ -1,24 +1,23 @@
 #include <string>
 #include <vector>
 #include "errors.h"
-using namespace std;
 
 #ifndef POSITION_H
 #define POSITION_H
 
 class Position {
     private:
-    string name;
-    string contents;
-    vector<int> inputInts;
+    std::string name;
+    std::string contents;
+    std::vector<int> inputInts;
 
     public:
     Position(char filename[20], int argc); // argc is necessary to determine how many rotors there are.
-    vector<int> position_vector;
+    std::vector<int> position_vector;
     int load_position(char filename[20], int number_of_rotors);
     int exit_code = 0;
-    void insert_to_vector(vector<int>& position_vector, string contents);
-    void print_ints(vector<int> position_vector);
+    void insert_to_vector(std::vector<int>& position_vector, std::string contents);
+    void print_ints(std::vector<int> position_vector);
 };
 
 #endif

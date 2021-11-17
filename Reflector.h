@@ -1,24 +1,23 @@
 #include <string>
 #include <vector>
 #include "errors.h"
-using namespace std;
 
 #ifndef REFLECTOR_H
 #define REFLECTOR_H
 
 class Reflector {
     private:
-    string name;
-    string contents;
+    std::string name;
+    std::string contents;
 
     public:
     Reflector(char filename[20]);
     int length;
-    vector<int> reflector_vector;
+    std::vector<int> reflector_vector;
     int load_reflector(char filename[20]);
     int exit_code = 0;
-    void insert_to_vector(vector<int>& reflector_vector, string contents);
-    void print_ints(vector<int> reflector_vector);
+    void insert_to_vector(std::vector<int>& reflector_vector, std::string contents);
+    void print_ints(std::vector<int> reflector_vector);
 };
 
 #endif

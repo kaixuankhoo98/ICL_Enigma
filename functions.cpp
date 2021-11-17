@@ -63,17 +63,17 @@ string encrypt(string input, char* argv[], int argc) {
         while (rotor1.rotor_vector[0] != position.position_vector[0]) {
             rotor1.rotate_rotor(rotor1.rotor_vector);
         } // Rotor 1
-    } rotor1.print_ints(rotor1.rotor_vector);
+    }
     if (argc >= 6) {
         while (rotor2.rotor_vector[0] != position.position_vector[1]) {
             rotor2.rotate_rotor(rotor2.rotor_vector);
         } // Rotor 2
-    } rotor2.print_ints(rotor2.rotor_vector);
+    }
     if (argc >= 7) {
         while (rotor3.rotor_vector[0] != position.position_vector[2]) {
             rotor3.rotate_rotor(rotor3.rotor_vector);
         } // Rotor 3 
-    } rotor3.print_ints(rotor3.rotor_vector);
+    }
 
     for (int i = 0; i < input.length(); i++)  { // go through each letter one by one.
         if (argc == 7) rotor3.rotate_rotor(rotor3.rotor_vector);
