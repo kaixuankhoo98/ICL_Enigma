@@ -18,6 +18,7 @@ int main(int argc, char** argv) {
         exit(INSUFFICIENT_NUMBER_OF_PARAMETERS);
     }
 
+    /*
     int number_of_rotors = 0;
     // Tests for loading the correct files from the command line
     cout << "The files loaded are: " << endl;
@@ -28,18 +29,7 @@ int main(int argc, char** argv) {
         cout << argv[3+i] << " ";
         number_of_rotors++;
     } cout << "(Total of " << number_of_rotors << " rotors) " << endl;
-    cout << "Rotor position: " << argv[argc-1] << "\n" << endl;
-
-    /*
-    Plugboard plugboard(argv[1]);
-    cout << "Plugboard exit code: " << plugboard.exit_code << endl << endl;
-    Reflector reflector(argv[2]);
-    cout << "Reflector exit code: " << reflector.exit_code << endl << endl;
-    Rotor rotor1(argv[3]); 
-    cout << "Rotor exit code: " << rotor1.exit_code << endl << endl;
-    Position position(argv[argc-1], argc-1);
-    cout << "Position exit code: " << position.exit_code << endl << endl;
-    */
+    cout << "Rotor position: " << argv[argc-1] << "\n" << endl; */
 
     if (exit_codes_total(argc, argv) != 0) {
         cerr << "Exit code: " << exit_codes_total(argc, argv);
@@ -58,8 +48,7 @@ int main(int argc, char** argv) {
     }
 
     converted = convert_string(input);
-    // cout << converted << endl;
-    cout << encrypt(converted, argv, argc);
+    cout << encrypt(converted, argv, argc) << endl;
 
     return 0;
 }

@@ -13,6 +13,7 @@
 #include "Position.h"
 using namespace std;
 
+// Returns a string containing first line of the file opened
 string open_file_string(char filename[20]) {
     ifstream input;
     input.open(filename);
@@ -24,12 +25,13 @@ string open_file_string(char filename[20]) {
     return loaded_input;
 }
 
+// Verifies if the user's input only contains upper-case characters
 int verify_string(string cin_stream) {
     cin_stream.erase(remove(cin_stream.begin(), cin_stream.end(), ' '), cin_stream.end());
     cin_stream.erase(remove(cin_stream.begin(), cin_stream.end(), '\t'), cin_stream.end());
     cin_stream.erase(remove(cin_stream.begin(), cin_stream.end(), '\n'), cin_stream.end());
     cin_stream.erase(remove(cin_stream.begin(), cin_stream.end(), '\r'), cin_stream.end());
-    for (int i = 0; i < cin_stream.length(); i++) {
+    for (size_t i = 0; i < cin_stream.length(); i++) {
         if (cin_stream[i] < 'A' || cin_stream[i] > 'Z') {
             return INVALID_INPUT_CHARACTER;
         }
@@ -37,6 +39,7 @@ int verify_string(string cin_stream) {
     return 0;
 }
 
+// Converts user's input string into a string without any whitespaces
 string convert_string(string input) {
     input.erase(remove(input.begin(), input.end(), ' '), input.end());
     input.erase(remove(input.begin(), input.end(), '\t'), input.end());
@@ -45,7 +48,7 @@ string convert_string(string input) {
     return input;
 }
 
-
+// Big function to encrypt the entire user input message
 string encrypt(string input, char* argv[], int argc) {
     Plugboard plugboard(argv[1]);
     Reflector reflector(argv[2]);
@@ -75,23 +78,24 @@ string encrypt(string input, char* argv[], int argc) {
         } // Rotor 3 
     }
 
-    for (int i = 0; i < input.length(); i++)  { // go through each letter one by one.
+    for (size_t i = 0; i < input.length(); i++)  { // go through each letter one by one.
         if (argc == 7) rotor3.rotate_rotor(rotor3.rotor_vector);
         if (argc == 6) rotor2.rotate_rotor(rotor2.rotor_vector);
         if (argc == 5) rotor1.rotate_rotor(rotor1.rotor_vector);
 
         int letter = input[i] - static_cast<int>('A'); // letter converted to int 
         
-        // Plugboard swap
+        // ENTER PLUGBOARDS
         letter = through_plugboard(argc, argv, letter);    // Pass on letter to rotors
 
+        // GO THROUGH ROTORS, depends on number of inputs
         int through_rotors;
         if (argc == 7) through_rotors = rotor3.rotor_vector[rotor2.rotor_vector[rotor1.rotor_vector[letter]]];
         if (argc == 6) through_rotors = rotor2.rotor_vector[rotor1.rotor_vector[letter]];
         if (argc == 5) through_rotors = rotor1.rotor_vector[letter];
+        if (argc == 4) through_rotors = letter;
 
-
-        // Reflector swap
+        // SWAP AT REFLECTOR
         int reflected_letter;
         for (int k = 0; k < reflector.length; k++) {
             if (through_rotors == reflector.reflector_vector[k]) {
@@ -104,51 +108,63 @@ string encrypt(string input, char* argv[], int argc) {
             }
         }
 
+        // PASS BACK THROUGH ROTORS
         int back_through_rotors;
         if (argc == 7) {
             for (int j = 0; j < 26; j++) {
                 if (rotor3.rotor_vector[rotor2.rotor_vector[rotor1.rotor_vector[j]]] == reflected_letter)
                     back_through_rotors = j;
             }
-        } // Passes back through rotors
+        } 
+        if (argc == 6) {
+            for (int j = 0; j < 26; j++) {
+                if (rotor2.rotor_vector[rotor1.rotor_vector[j]] == reflected_letter)
+                    back_through_rotors = j;
+            }
+        }
+        if (argc == 5) {
+            for (int j = 0; j < 26; j++) {
+                if (rotor1.rotor_vector[j] == reflected_letter)
+                    back_through_rotors = j;
+            }
+        }
+        if (argc == 4) {
+            back_through_rotors = reflected_letter;
+        }
 
+        // FINAL PASS BACK THROUGH PLUGBOARDS
         int output = back_through_rotors;
-        // FINAL PASS THROUGH PLUGBOARDS
         output = through_plugboard(argc, argv, output);
 
 
+        // ROTATION ACCORDING TO NOTCHES
         if (argc == 7) {
-            for (int i = 0; i < rotor3.notches.size(); i++) {
+            for (size_t i = 0; i < rotor3.notches.size(); i++) {
                 if (rotate_true(rotor3.rotor_vector, rotor3.notches)) {
                     rotor2.rotate_rotor(rotor2.rotor_vector);
                 } // Rotates the rotor to the left if the first position is in the notches
             }
-            for (int i = 0; i < rotor2.notches.size(); i++) {
+            for (size_t i = 0; i < rotor2.notches.size(); i++) {
                 if (rotate_true(rotor2.rotor_vector, rotor2.notches)) {
                     rotor1.rotate_rotor(rotor1.rotor_vector);
                 } 
             }
         } // Rotation sequence if there are 3 rotors
-
         if (argc == 6) {
-            for (int i = 0; i < rotor2.notches.size(); i++) {
+            for (size_t i = 0; i < rotor2.notches.size(); i++) {
                 if (rotate_true(rotor2.rotor_vector, rotor2.notches)) {
                     rotor1.rotate_rotor(rotor1.rotor_vector);
                 } 
             }
         } // Rotation sequence if there are 2 rotors
-        
-        // cout << rotor_3_letter << " ";
-
-        // cout << letter << "\t" << rotor_1_letter << "\t" << rotor_2_letter << "\t" << rotor_3_letter 
-        // << "\t" << reflected_letter << "\t" << backletter_1 << "\t" << backletter_2 << "\t" << backletter_3 << "\n"; 
+        // No rotation of other rotors if there is only 1 rotor
 
         encrypted += static_cast<char>(output + 'A');
     }
-    cout << "\n";
     return encrypted;
 }
 
+// Creates a rotor based on file name
 Rotor make_rotor(int argc, char* argv[], int number) {
     if (argc >= 5 && number == 1) {
         return Rotor(argv[3]);
@@ -162,6 +178,8 @@ Rotor make_rotor(int argc, char* argv[], int number) {
     return Rotor();
 }
 
+// Loads all the files, imports them into their respective class
+// Returns the exit code starting from the earliest file read
 int exit_codes_total(int argc, char* argv[]) {
     Plugboard plugboard(argv[1]);
     Reflector reflector(argv[2]);
@@ -181,6 +199,7 @@ int exit_codes_total(int argc, char* argv[]) {
     return 0;
 }
 
+// Pass the input char through the plugboard
 char through_plugboard(int argc, char* argv[], char input) {
     Plugboard plugboard(argv[1]);
 
@@ -198,8 +217,9 @@ char through_plugboard(int argc, char* argv[], char input) {
     return input;
 }
 
+// Returns true if the first position of the rotor is in the notches
 bool rotate_true(vector<int> rotor, vector<int> notch) {
-    for (int i = 0; i < notch.size(); i++) {
+    for (size_t i = 0; i < notch.size(); i++) {
         if (rotor[0] == notch[i])
             return true;
     }

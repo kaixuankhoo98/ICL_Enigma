@@ -19,7 +19,7 @@ Position::Position(char filename[20], int argc) {
     // print_ints(position_vector);
 }
 
-int Position::load_position(char filename[20], int number_of_rotors) {
+int Position::load_position(char filename[20], size_t number_of_rotors) {
     string contents = open_file_string(filename);
     // cout << "The position file loaded contains:\n" << contents << endl; 
     vector<string> inputWords;
@@ -31,10 +31,10 @@ int Position::load_position(char filename[20], int number_of_rotors) {
 
     vector<int> inputInts;
 
-    for (int i = 0; i < inputWords.size(); i++) {
+    for (size_t i = 0; i < inputWords.size(); i++) {
         try {inputInts.push_back(stoi(inputWords[i]));} // Convert vector of strings to vector of ints
         catch (invalid_argument &e) {return NON_NUMERIC_CHARACTER;} // Catch in case vector cannot be converted to int
-        for (int j = 0; j < inputWords[i].length(); j++) {
+        for (size_t j = 0; j < inputWords[i].length(); j++) {
             if (!isdigit(inputWords[i][j])) {
                 return NON_NUMERIC_CHARACTER;
             }
@@ -57,14 +57,14 @@ void Position::insert_to_vector(vector<int>& position_vector, string contents) {
         inputWords.push_back(word);
     }
 
-    for (int i = 0; i < inputWords.size(); i++) {
+    for (size_t i = 0; i < inputWords.size(); i++) {
         position_vector.push_back(stoi(inputWords[i]));
     }
 }
 
 void Position::print_ints(vector<int> position_vector) {
     cout << "The position integers loaded are:\n";
-    for (int i = 0; i < position_vector.size(); i++) {
+    for (size_t i = 0; i < position_vector.size(); i++) {
         cout << position_vector[i] << " ";
     }
     cout << endl;

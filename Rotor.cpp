@@ -36,10 +36,10 @@ int Rotor::load_rotor(char filename[20]) {
 
     vector<int> inputInts;
 
-    for (int i = 0; i < inputWords.size(); i++) {
+    for (size_t i = 0; i < inputWords.size(); i++) {
         try {inputInts.push_back(stoi(inputWords[i]));}
         catch (invalid_argument &e) {return NON_NUMERIC_CHARACTER;}
-        for (int j = 0; j < inputWords[i].length(); j++) {
+        for (size_t j = 0; j < inputWords[i].length(); j++) {
             if (!isdigit(inputWords[i][j])) {
                 return NON_NUMERIC_CHARACTER;
             }
@@ -47,7 +47,7 @@ int Rotor::load_rotor(char filename[20]) {
         if (inputInts[i] < 0 || inputInts[i] >= 26)
             return INVALID_INDEX;
         if (i != 0 && i < 26) {
-            for (int j = 0; j < i-1; j++) {
+            for (size_t j = 0; j < i-1; j++) {
                 if (inputInts[i] == inputInts[j]) {
                     return INVALID_ROTOR_MAPPING;
                 }
@@ -68,13 +68,13 @@ void Rotor::insert_to_vector(vector<int>& rotor_vector, string contents) {
         inputWords.push_back(word);
     }
 
-    for (int i = 0; i < inputWords.size(); i++) {
+    for (size_t i = 0; i < inputWords.size(); i++) {
         rotor_vector.push_back(stoi(inputWords[i]));
     }
 }
 
 void Rotor::get_notches(vector<int>& notches, vector<int> rotor_vector) {
-    for (int i = 26; i < rotor_vector.size(); i++) {
+    for (size_t i = 26; i < rotor_vector.size(); i++) {
         notches.push_back(rotor_vector[i]);
     }
 }
@@ -89,7 +89,7 @@ void Rotor::rotate_rotor(vector<int>& rotor_vector) {
 
 void Rotor::print_ints(vector<int> rotor_vector) {
     cout << "The rotor integers loaded are:\n";
-    for (int i = 0; i < rotor_vector.size(); i++) {
+    for (size_t i = 0; i < rotor_vector.size(); i++) {
         cout << rotor_vector[i] << " ";
     }
     cout << endl;
