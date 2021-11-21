@@ -41,7 +41,7 @@ int Plugboard::load_plugboard(char filename[20]) {
         }
         if (inputInts[i] < 0 || inputInts[i] >= 26)
             return INVALID_INDEX;
-        if (i != 0) {
+        if (i != 0 && i < 26) {
             for (size_t j = 0; j < i-1; j++) {
                 if (inputInts[i] == inputInts[j]) {
                     return IMPOSSIBLE_PLUGBOARD_CONFIGURATION;
@@ -49,7 +49,7 @@ int Plugboard::load_plugboard(char filename[20]) {
             }
         }
     }
-    if (inputWords.size() % 2 == 1)
+    if (inputWords.size() % 2 == 1 || inputWords.size() > 26)
         return INCORRECT_NUMBER_OF_PLUGBOARD_PARAMETERS;
     
     return NO_ERROR;

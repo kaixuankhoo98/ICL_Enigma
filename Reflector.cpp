@@ -41,7 +41,7 @@ int Reflector::load_reflector(char filename[20]) {
         }
         if (inputInts[i] < 0 || inputInts[i] >= 26)
             return INVALID_INDEX;
-        if (i != 0) {
+        if (i != 0 && i < 26) {
             for (size_t j = 0; j < i-1; j++) {
                 if (inputInts[i] == inputInts[j]) {
                     return INVALID_REFLECTOR_MAPPING;
@@ -49,7 +49,7 @@ int Reflector::load_reflector(char filename[20]) {
             }
         }
     }
-    if (inputInts.size() != 26)
+    if (inputInts.size() != 26 || inputInts.size() > 26)
         return INCORRECT_NUMBER_OF_REFLECTOR_PARAMETERS;
     
     return NO_ERROR;

@@ -14,7 +14,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
     if (argc < 4) {
-        cerr << "Insufficient number of parameters.";
+        cerr << "usage: enigma plugboard-file reflector-file (<rotor-file>)* rotor-positions";
         exit(INSUFFICIENT_NUMBER_OF_PARAMETERS);
     }
 
@@ -34,7 +34,30 @@ int main(int argc, char** argv) {
     if (exit_codes_total(argc, argv) != 0) {
         cerr << "Exit code: " << exit_codes_total(argc, argv);
         return exit_codes_total(argc, argv);
+    } // Do individual exit codes
+    /* if (int exit_pb = exit_code_plugboard(argc, argv) != 0) {
+        if (exit_pb == 6) {
+            cerr << "Incorrect number of parameters in plugboard file " << argv[1];
+            return exit_pb;
+        }
+        // more
     }
+    if (int exit_rf = exit_code_reflector(argc, argv) != 0) {
+        if (exit_rf == 9) {
+            cerr << "Incorrect (odd) number of parameters in reflector file " << argv[2];
+            return exit_rf;
+        }
+        if (exit_rf == 4) {
+            cerr << "Non-numeric character for mapping in rotor file " << argv[2];
+            return exit_rf;
+        }
+    }
+    if (int exit_rot = exit_code_rotor(argc, argv) != 0) {
+        if (exit_rot == 7) {
+            cerr << "Not all inputs mapped in rotor file: "
+        }
+    } */
+
 
     string input, converted;
     cout << "Please enter the message you would like to encrypt in all upper-case:" << endl;
