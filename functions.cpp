@@ -77,6 +77,27 @@ string encrypt(string input, char* argv[], int argc) {
             rotor3.rotate_rotor(rotor3.rotor_vector);
         } // Rotor 3 
     }
+    // ROTATION ACCORDING TO NOTCHES
+        if (argc == 7) {
+            for (size_t i = 0; i < rotor3.notches.size(); i++) {
+                if (rotate_true(rotor3.rotor_vector, rotor3.notches)) {
+                    rotor2.rotate_rotor(rotor2.rotor_vector);
+                } // Rotates the rotor to the left if the first position is in the notches
+            }
+            for (size_t i = 0; i < rotor2.notches.size(); i++) {
+                if (rotate_true(rotor2.rotor_vector, rotor2.notches)) {
+                    rotor1.rotate_rotor(rotor1.rotor_vector);
+                } 
+            }
+        } // Rotation sequence if there are 3 rotors
+        if (argc == 6) {
+            for (size_t i = 0; i < rotor2.notches.size(); i++) {
+                if (rotate_true(rotor2.rotor_vector, rotor2.notches)) {
+                    rotor1.rotate_rotor(rotor1.rotor_vector);
+                } 
+            }
+        } // Rotation sequence if there are 2 rotors
+        // No rotation of other rotors if there is only 1 rotor
 
     for (size_t i = 0; i < input.length(); i++)  { // go through each letter one by one.
         if (argc == 7) rotor3.rotate_rotor(rotor3.rotor_vector);
@@ -137,27 +158,7 @@ string encrypt(string input, char* argv[], int argc) {
         output = through_plugboard(argc, argv, output);
 
 
-        // ROTATION ACCORDING TO NOTCHES
-        if (argc == 7) {
-            for (size_t i = 0; i < rotor3.notches.size(); i++) {
-                if (rotate_true(rotor3.rotor_vector, rotor3.notches)) {
-                    rotor2.rotate_rotor(rotor2.rotor_vector);
-                } // Rotates the rotor to the left if the first position is in the notches
-            }
-            for (size_t i = 0; i < rotor2.notches.size(); i++) {
-                if (rotate_true(rotor2.rotor_vector, rotor2.notches)) {
-                    rotor1.rotate_rotor(rotor1.rotor_vector);
-                } 
-            }
-        } // Rotation sequence if there are 3 rotors
-        if (argc == 6) {
-            for (size_t i = 0; i < rotor2.notches.size(); i++) {
-                if (rotate_true(rotor2.rotor_vector, rotor2.notches)) {
-                    rotor1.rotate_rotor(rotor1.rotor_vector);
-                } 
-            }
-        } // Rotation sequence if there are 2 rotors
-        // No rotation of other rotors if there is only 1 rotor
+        
 
         encrypted += static_cast<char>(output + 'A');
     }
@@ -198,31 +199,7 @@ int exit_codes_total(int argc, char* argv[]) {
 
     return 0;
 }
-int exit_code_plugboard(int argc, char* argv[]) {
-    Plugboard plugboard(argv[1]);
-    if (plugboard.exit_code != 0) return plugboard.exit_code;
-    return 0;
-}
-int exit_code_reflector(int argc, char* argv[]) {
-    Reflector reflector(argv[2]);
-    if (reflector.exit_code != 0) return reflector.exit_code;
-    return 0;
-}
-int exit_code_rotor(int argc, char* argv[]) {
-    Rotor rotor1 = make_rotor(argc, argv, 1);
-    Rotor rotor2 = make_rotor(argc, argv, 2);
-    Rotor rotor3 = make_rotor(argc, argv, 3);
-    // Current capacity up to 3 rotors. Can add more if necessary. 
-    if (rotor1.exit_code != 0) return rotor1.exit_code;
-    if (rotor2.exit_code != 0) return rotor2.exit_code;
-    if (rotor3.exit_code != 0) return rotor3.exit_code;
-    return 0;
-}
-int exit_code_position(int argc, char* argv[]) {
-    Position position(argv[argc-1], argc-1);
-    if (position.exit_code != 0) return position.exit_code;
-    return 0;
-}
+
 
 // Pass the input char through the plugboard
 char through_plugboard(int argc, char* argv[], char input) {
