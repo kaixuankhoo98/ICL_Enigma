@@ -1,0 +1,2 @@
+# ICL_Enigma
+This repo contains my enigma C++ coursework from the beginning of my course. The implementation could definitely be improved on, as well as using better object-oriented design, and there are definitely files here that shouldn't have been pushed to github (.o object files, etc), but this definitely shows how I started and where I came from, and if you compare it to the object-oriented design I am capable of now (see my exam repo), it shows how much I have improved. 
